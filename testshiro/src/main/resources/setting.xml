@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--使用注解方式须设置自动扫描-->
+    <context:component-scan base-package="com.testshiro.testshiro.testaop" />
+    
+    <!--使用xml配置方式-->
+    <bean id="schoolxml" autowire="byName" class="com.testshiro.testshiro.testaop.SchoolXml" scope="singleton">
+        <constructor-arg name="name" value="上海大学" />
+        <constructor-arg name="adress" value="上海" />
+        <!--<constructor-arg index="0" value="上海大学"/>
+        <constructor-arg index="1" value="上海"/>-->
+    </bean>
+    <bean id="studentxml" autowire="byType" class="com.testshiro.testshiro.testaop.StudentXml" scope="singleton">
+        <property name="name" value="四" />
+        <property name="age" value="20" />
+        <!--引用类型的赋值用ref 值为bean的id-->
+        <property name="school" ref="schoolxml" />
+    </bean>
+    <!--自动生成aspectj代理器,用于把spring容器中需增强的对象自动生成代理-->
+    <!--当需要代理的类实现接口 则默认使用jdk代理，无接口则默认使用cglib代理，有接口时也可以使用cglib代理 需设置proxy-target-class=true 代表目标类是类没有接口-->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    <!--aop xml配置方式 将切面类的注解取消 以xml方式配置-->
+    <!--<aop:config>
+        &lt;!&ndash;定义通用切入点 切入点表达式&ndash;&gt;
+        <aop:pointcut id="mypt" expression="execution(* com.testshiro.testshiro.testaop.IOldClassImpl.*())" />
+        &lt;!&ndash;定义切面类 =切面类的@Aspect&ndash;&gt;
+        <aop:aspect ref="aopLog" id="aopqm">
+            <aop:before method="after" pointcut-ref="mypt" />
+            <aop:after-returning method="afterreturning" returning="result" pointcut-ref="mypt" />
+            <aop:around method="around" pointcut-ref="mypt" />
+            <aop:after-throwing method="afterthrow" pointcut-ref="mypt" throwing="ex" />
+            <aop:after method="after" pointcut-ref="mypt" />
+        </aop:aspect>
+    </aop:config>-->
+    
+</beans>
