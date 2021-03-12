@@ -13,16 +13,8 @@
        http://www.springframework.org/schema/aop
        https://www.springframework.org/schema/aop/spring-aop.xsd">
     
-    <context:property-placeholder location="set.properties" />
     <context:component-scan base-package="com.testshiro.testshiro" />
-    <!--使用druid连接池管理数据连接-->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="url" value="${jdbc.url}" />
-        <property name="name" value="${jdbc.user}" />
-        <property name="password" value="${jdbc.pas}" />
-        <!--        <property name="oracle" value="true" />-->
-        <!--        <property name="driverClassName" value="${jdbc.driverclass}"/>-->
-    </bean>
+    
     <!--mybatis对象的创建工厂-->
     <bean id="sessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!--数据源 使用druid连接池-->
@@ -38,7 +30,9 @@
         <property name="basePackage" value="com.testshiro.testshiro.dao" />
     </bean>
     <!--申明事务管理器-->
-    <bean id="transactionManager" class="org.springframework.transaction.support.TransactionTemplate"></bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
     <!--使用注解的事务配置 启用事务注解 方法过多时 则繁琐 xml方便-->
     <!--    <tx:annotation-driven transaction-manager="transactionManager" />-->
     <!--使用xml的事务配置-->

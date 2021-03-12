@@ -12,11 +12,14 @@
     values (#{name,jdbcType=VARCHAR})
   </insert>
     <select id="list" resultMap="BaseResultMap">
-        select * from TEST where NAME 1=1
+        select * from TEST where 1=1
         <if test="name!=''">
-           and like #{name}
+           and name like #{name}
         </if>
         
     </select>
+    <select id="selectbyname" resultMap="BaseResultMap">
+    select * from TEST where 1=1 and name=#{name}
+</select>
     
 </mapper>
